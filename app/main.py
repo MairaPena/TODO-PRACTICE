@@ -1,5 +1,6 @@
 from typing import Dict
 
+import pydantic
 import uvicorn
 from fastapi import FastAPI
 
@@ -25,10 +26,15 @@ def get_all_tasks() -> list[Dict]:
     return services.get_all_tasks(db=DatabaseAdapter())
 
 
+class Response(pydantic.BaseModel):
+    task_id: str
+
+
 # Define a route for the /create_task endpoint
 @app.post("/create_task", status_code=201)
-def create_task(task: Dict) -> str:
-    return services.create_task(task=task, db=DatabaseAdapter())
+def create_task(task: Dict) -> dict:
+    id_ = services.create_task(task=task, db=DatabaseAdapter())
+    return Response(task_id=id_).model_dump()
 
 
 if __name__ == "__main__":  # Only input dev
