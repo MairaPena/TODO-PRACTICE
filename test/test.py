@@ -56,6 +56,7 @@ def test_should_get_teacher_when_calling_get_teacher_with_complexity_easy():
     # Act
     result = services._get_teacher(complexity, description)
     # Assert
+    raise Exception(result)
     assert result == expected
 
 
